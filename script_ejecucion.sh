@@ -7,7 +7,8 @@ if [ $# -ne 1 ]; then
 fi
 
 SRC=$1
-BIN=$(basename "$SRC" .c)
+NAME=$(basename "$SRC" .c)
+BIN="paralelo/codigo/$NAME"
 
 # compilar
 echo "Compilando $SRC ..."
@@ -18,33 +19,39 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# crear carpetas de resultados
-mkdir -p resultados_teen
-mkdir -p resultados_orca
-
 echo "===== Ejecutando en TEEN ====="
 
-for t in $(seq 2 32); do
+for t in 2 4 8 16 32; do
     echo "Threads: $t"
 
     {
+        echo "Programa: $NAME"
         echo "Threads: $t"
+        echo "Maquina: teen"
+        echo "----------------------"
+
         /usr/bin/time -f "Tiempo_total: %e segundos" \
-        srun -p teen -c $t ./$BIN
-    } &> resultados_teen/teen_$t
+        srun -p teen -c $t $BIN
+
+    } &> paralelo/resultados_teen/teen_${NAME}_$t
 done
 
 
 echo "===== Ejecutando en ORCA ====="
 
-for t in $(seq 2 128); do
+for t in 2 4 8 16 32 64 128; do
     echo "Threads: $t"
 
     {
+        echo "Programa: $NAME"
         echo "Threads: $t"
+        echo "Maquina: orca"
+        echo "----------------------"
+
         /usr/bin/time -f "Tiempo_total: %e segundos" \
-        srun -p orca -c $t ./$BIN
-    } &> resultados_orca/orca_$t
+        srun -p orca -c $t $BIN
+
+    } &> paralelo/resultados_orca/orca_${NAME}_$t
 done
 
 
