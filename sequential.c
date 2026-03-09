@@ -70,41 +70,53 @@ int fD[N];
 	 printf("iter %d\n",iter);
 }
 
+/*
+	Parametros:
+		-ii; Indice inicial del subarray a ordenar
+		-fi: indice final del subarray
+		-fV[]: Array d valores q queremos ordenar (los centroides R)
+		-fA[]: Array paralelo tiene los conteos d elemenotos d cada cluster
+   Quicksort: Loq hacmemos aqui es ordenar Vf[] d menor a mayor y mantener la correspondencia de fA para que cada fA[i] siga al valor correcto
+*/
 void qs(int ii, int fi, long fV[], int fA[])
  {
   int i,f,j;
   long pi,pa,vtmp,vta,vfi,vfa;
 
-  pi = fV[ii];
-  pa = fA[ii];
-  i = ii +1;
-  f = fi;
-  vtmp = fV[i];
+  pi = fV[ii];				// Pivote del subarray, el primer elemento
+  pa = fA[ii];				
+  i = ii +1;				// Indice q va avanzando dsd la izquierda	 (inicio)
+  f = fi;					// Indice q va retrocediendo dsd la dereecha (final)
+  vtmp = fV[i];				// temporales
   vta = fA[i];
-
+  
+  // mientras que no lleguemos al final
   while (i <= f)
    {
-    if (vtmp < pi) {
-	  fV[i-1] = vtmp;
-	  fA[i-1] = vta;
-	  i ++;
-	  vtmp = fV[i];
+    if (vtmp < pi) {			// si valor temporal menor q el pivote, se coloca a la izquierda del pivote
+	  fV[i-1] = vtmp;			// colocamos el valor en la posición anterior
+	  fA[i-1] = vta;			// movemos tmb el valor asociado
+	  i ++;						// pasamos al siguiente elemento
+	  vtmp = fV[i];				// cargamos el siguiente valor
 	  vta = fA[i];
 	}
-    else {
-	  vfi = fV[f];
+    else {						// Si valor es mayor o igual a pivote debe ir a su derecha
+	  vfi = fV[f];				// guardamos el elemento del extremo derecho antes d sobreescribir
 	  vfa = fA[f];
-	  fV[f] = vtmp;
+	  fV[f] = vtmp;				// valor actual se mueve a la zona derecha
 	  fA[f] = vta;
-	  f --;
-	  vtmp = vfi;
+	  f --;						// movemos el extremo derecho, 1 a la izquierda
+	  vtmp = vfi;				// pillamos el valor que estaba al final
 	  vta = vfa;
 	}
    }
+  
   fV[i-1] = pi;
   fA[i-1] = pa;
-
+  
+  // ordenamos recursivamente el subarrayizquierdo
   if (ii < f) qs(ii,f,fV,fA);
+  // Lo mismo pero con el derecho
   if (i < fi) qs(i,fi,fV,fA);
  }
 
