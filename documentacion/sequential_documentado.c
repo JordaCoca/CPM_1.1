@@ -105,14 +105,14 @@ void qs(int ii, int fi, long fV[], int fA[])
 	  vtmp = fV[i];				// cargamos el siguiente valor														|S5|
 	  vta = fA[i];				//																					|S6|
 	}
-    else {						// Si valor es mayor o igual a pivote debe ir a su derecha							|S7|
-	  vfi = fV[f];				// guardamos el elemento del extremo derecho antes d sobreescribir					|S8|
-	  vfa = fA[f];				//																					|S9|
-	  fV[f] = vtmp;				// valor actual se mueve a la zona derecha											|S10|											
-	  fA[f] = vta;				//																					|S11|						
-	  f --;						// movemos el extremo derecho, 1 a la izquierda										|S12|
-	  vtmp = vfi;				// pillamos el valor que estaba al final											|S13|
-	  vta = vfa;				//																					|S14|
+    else {						// Si valor es mayor o igual a pivote debe ir a su derecha							
+	  vfi = fV[f];				// guardamos el elemento del extremo derecho antes d sobreescribir					|S7|
+	  vfa = fA[f];				//																					|S8|
+	  fV[f] = vtmp;				// valor actual se mueve a la zona derecha											|S9|											
+	  fA[f] = vta;				//																					|S10|						
+	  f --;						// movemos el extremo derecho, 1 a la izquierda										|S11|
+	  vtmp = vfi;				// pillamos el valor que estaba al final											|S12|
+	  vta = vfa;				//																					|S13|
 	}
    }
   

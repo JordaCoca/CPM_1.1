@@ -47,3 +47,9 @@ Propuesta:
         }
     }
 }
+
+
+====
+Bucle 4: El bucle 4 son solo 200 iteraciones a demás de tener el elemento acumulativo del dif, por lo que de momento
+no me complico y lo dejaré tal cual.  Además a lomejor el overhead simplemente no lo haria worth it, no lo he comprovado así
+que son palabras vacias de momento
