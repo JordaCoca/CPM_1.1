@@ -46,10 +46,12 @@ int fD[N];
 	  //-fS[]: Almacenar la suma d todos los elmentos asignados al cluster i
 	  //-fA[]: Almacenar cuantos elementos hay en cada cluster
 	  
+	  // === BUCLE 2 ===
 	  // Inicializamos los acumuladres a 0
 	  for(i=0;i<fK;i++)				//		|S9|
 		fS[i] = fA[i] = 0;			//		|S10|
 
+	  // === BUCLE 3 ===
 	  // Fd[]: Es un array que tiene tantas posiciones como elementos a asignar, cada casilla indica que elemento (i) pertenece a que cluster (el valor como tal (un indice))
 	  for(i=0;i<fN;i++)
 	   {
@@ -58,7 +60,7 @@ int fD[N];
 	   }
 	  
 	  // Recalculamos los centroides con la media de los elementos asignados
-	  // === BUCLE 2 ===
+	  // === BUCLE 4 ===
 	  dif = 0;								// mide cuanto cambiaron los centroides en esta iteración, condicion d parada					|S13|
 	  for(i=0;i<fK;i++)						// miramos todos los clusters (num d clusters = fK)
 	   {
@@ -93,7 +95,7 @@ void qs(int ii, int fi, long fV[], int fA[])
   vta = fA[i];
   
   // mientras que no lleguemos al final
-  // === BUCLE 3 === 
+  // === BUCLE 5 === 
   while (i <= f)
    {
     if (vtmp < pi) {			// si valor temporal menor q el pivote, se coloca a la izquierda del pivote			|S1|

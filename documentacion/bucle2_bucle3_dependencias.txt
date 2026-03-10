@@ -1,0 +1,49 @@
+El bucle 2, no hace falta comentar nada excepcional ya que es un bucle muy facil de paralelizar ya que no hay ningun tipo de dependencia.
+
+El bucle 3 pero si que presenta más problemas, tenemos una race condition:
+for(i=0;i<fN;i++)
+{
+	fS[fD[i]] += fV[i];         // |S1|
+	fA[fD[i]] ++;               // |S2|
+}
+
+=====
+fS (tiene el valor combinado de todos los elementos d cada cluster) y fA (contador de cuantos elementos tiene cada cluster)
+son arrays donde cada posición representa 1 cluster, y accedemos al cluster correcto segun el array de cluster_asignado --> cada posición
+representa uno de los elementos a ordenar, y el valor como tal dentro del array es el indice al cluster al que pertenecen.
+Que implica esto? --> Si quisiesemos paralelizar, podriamos tener que en multiples hilos quisiesemos actualizar la posición correspondiente
+al mismo cluster --> Race Condition. Es necesario entonces proponer lo siguiente:
+ -- Que cada thread tenga su propia copia de fS  y fA local, para que luego sincronizarlas y hacer una suma conjunta.
+
+=====
+Propuesta:
+#pragma omp parallel
+{
+    long fS_local[G];
+    int  fA_local[G];
+
+    /* Ponemos a 0 los acumuladores iniciales */
+    for(int j=0;j<fK;j++){
+        fS_local[j] = 0;
+        fA_local[j] = 0;
+    }
+
+    /* reparto de elementos entre hilos */
+    #pragma omp for
+    for(int i=0;i<fN;i++)
+    {
+        int c = fD[i];              // cluster del elemento
+        fS_local[c] += fV[i];       // sumamos al local
+        fA_local[c] ++;
+    }
+
+    /* Suma para cuadrar los resultados y agruparlos en 1 --> reducción */
+    /* Metemos el critical porque queremos que esto se haga solo por un solo thread */
+    #pragma omp critical
+    {
+        for(int j=0;j<fK;j++){      
+            fS[j] += fS_local[j];   
+            fA[j] += fA_local[j];
+        }
+    }
+}
