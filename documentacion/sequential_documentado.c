@@ -27,6 +27,7 @@ int fD[N];
 	do
 	 {
 	  // Miramos todos los elementos
+	  // === BUCLE 1 ===
 	  for (i=0;i<fN; i++)
 	   {
 		min = 0;						 // Indice del centroide (cluster) con el que se guarda una distancia menor (inicialmente 0)												|S1|
@@ -57,6 +58,7 @@ int fD[N];
 	   }
 	  
 	  // Recalculamos los centroides con la media de los elementos asignados
+	  // === BUCLE 2 ===
 	  dif = 0;								// mide cuanto cambiaron los centroides en esta iteración, condicion d parada					|S13|
 	  for(i=0;i<fK;i++)						// miramos todos los clusters (num d clusters = fK)
 	   {
@@ -91,6 +93,7 @@ void qs(int ii, int fi, long fV[], int fA[])
   vta = fA[i];
   
   // mientras que no lleguemos al final
+  // === BUCLE 3 === 
   while (i <= f)
    {
     if (vtmp < pi) {			// si valor temporal menor q el pivote, se coloca a la izquierda del pivote			|S1|

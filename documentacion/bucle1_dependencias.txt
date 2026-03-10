@@ -1,0 +1,31 @@
+for (i=0;i<fN; i++)
+	   {
+		min = 0;						 //|S1|
+		dif = abs(fV[i] -fR[0]);		 //|S2|
+		for (j=1;j<fK;j++)				 //|S3|
+		  if (abs(fV[i] -fR[j]) < dif)   //|S4|
+		   {																																							//			|S5|
+			min = j;					// |S5|
+			dif = abs(fV[i] -fR[j]);	// |S6|
+		   }	
+		fD[i] = min;					// |S7|	
+}
+
+===
+Dependencias:
+Origen 	 | Tipo | Variable | Distancia
+S1 -> S7 | RAW  | min	   | d=0
+S2 -> S4 | RAW  | dif      | d=0
+S5 -> S7 | RAW  | min      | d=0
+S6 -> S4 | RAW  | dif      | d=1
+S3 -> S5 | RAW  | j        | d=0
+S1 -> S5 | WAW  | min      | d=0
+S2 -> S6 | WAW  | dif      | d=0
+S4 -> S6 | WAR  | dif      | d=0
+
+===
+Conclusiones:
+Tenemos un problema, el bucle superior si es paralelizable, pero el interior (el que itera sobre j) tenemos un bucle entre S4 y S6
+además de que tenemos dependencias entre iteraciones. Tiene sentido ya que como estamos buscando un minimo, siempre tenemos que tener
+en mente el minimo actual, por lo que es necesario alterar un poco el codigo para eliminar esa dependencia entre iteraciones
+y así poder paralelizar ambos bucles lo que cabe imaginar que mejoraria el rendimiento del programa (ni que sea un poco todo, daño no puede hacer)
