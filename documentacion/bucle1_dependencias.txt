@@ -27,5 +27,12 @@ S4 -> S6 | WAR  | dif      | d=0
 Conclusiones:
 Tenemos un problema, el bucle superior si es paralelizable, pero el interior (el que itera sobre j) tenemos un bucle entre S4 y S6
 además de que tenemos dependencias entre iteraciones. Tiene sentido ya que como estamos buscando un minimo, siempre tenemos que tener
-en mente el minimo actual, por lo que es necesario alterar un poco el codigo para eliminar esa dependencia entre iteraciones
-y así poder paralelizar ambos bucles lo que cabe imaginar que mejoraria el rendimiento del programa (ni que sea un poco todo, daño no puede hacer)
+en mente el minimo actual, por lo que es necesario alterar un poco el codigo para eliminar esa dependencia entre iteraciones.
+
+Aunque viendolo bien, creo que no lo retocaré ya que este bucle interno de ver que cluster és más cercano, al haber solo 20 posibles clusters
+este bucle tendra 20 iteraciones, si paralelizamos el bucle superior, cada ilo tendra que hacer 20 iteraciones, si quisiesemos paralelizar
+este bucle, podriamos alomejor estando añadiendo un overhead (por el tema de organizar los hilos) que no vale la pena por el poco paralelizamosque pueda
+tener este bucle en el rendimiento del bucle.
+
+
+Conclusión --> Paralelizar el bucle externo como si fuese un bucle normal, y dejar el interno tal cual
