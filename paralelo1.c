@@ -155,6 +155,7 @@ if(i < fi) qs(i,fi,fV,fA);
 int main()
 {
 int i;
+printf("Threads: %d\n", omp_get_max_threads());
 
 for (i=0;i<N;i++)
     V[i] = (rand()%rand())/N;
