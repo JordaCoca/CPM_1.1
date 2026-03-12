@@ -1,58 +1,55 @@
 #!/bin/bash
 
-# comprobar argumento
-if [ $# -ne 1 ]; then
-    echo "Uso: $0 archivo.c"
-    exit 1
-fi
+SRC="codigo/paralelo1.c"
+BIN="codigo/p"
 
-SRC=$1
-NAME=$(basename "$SRC" .c)
-BIN="paralelo/codigo/$NAME"
+DIR_TEEN="resultados_teen"
+DIR_ORCA="resultados_orca"
 
-# compilar
-echo "Compilando $SRC ..."
-cc -O "$SRC" -o "$BIN" -lpthread -lm
+mkdir -p $DIR_TEEN
+mkdir -p $DIR_ORCA
+
+echo "Compilando programa..."
+cc -O3 -fopenmp $SRC -o $BIN
 
 if [ $? -ne 0 ]; then
-    echo "Error compilando."
+    echo "Error en compilacion"
     exit 1
 fi
 
-echo "===== Ejecutando en TEEN ====="
+echo "===== EJECUCIONES EN TEEN ====="
 
-for t in 2 4 8 16 32; do
+for t in 2 4 8 16 32
+do
     echo "Threads: $t"
 
     {
-        echo "Programa: $NAME"
-        echo "Threads: $t"
+        echo "Programa: paralelo1"
         echo "Maquina: teen"
+        echo "Threads: $t"
         echo "----------------------"
 
-        /usr/bin/time -f "Tiempo_total: %e segundos" \
-        srun -p teen -c $t $BIN
+        srun -p teen -c $t time $BIN
 
-    } &> paralelo/resultados_teen/teen_${NAME}_$t
+    } &> $DIR_TEEN/teen_$t
 done
 
 
-echo "===== Ejecutando en ORCA ====="
+echo "===== EJECUCIONES EN ORCA ====="
 
-for t in 2 4 8 16 32 64 128; do
+for t in 2 4 8 16 32 64 128
+do
     echo "Threads: $t"
 
     {
-        echo "Programa: $NAME"
-        echo "Threads: $t"
+        echo "Programa: paralelo1"
         echo "Maquina: orca"
+        echo "Threads: $t"
         echo "----------------------"
 
-        /usr/bin/time -f "Tiempo_total: %e segundos" \
-        srun -p orca -c $t $BIN
+        srun -p orca -c $t time $BIN
 
-    } &> paralelo/resultados_orca/orca_${NAME}_$t
+    } &> $DIR_ORCA/orca_$t
 done
 
-
-echo "Ejecuciones completadas."
+echo "Ejecuciones completadas"
