@@ -15,11 +15,13 @@ int i,j,min,iter=0;
 long dif,t;
 long fS[G];
 int fD[N];
+double t_b1=0, t_b2=0, t_b3=0, t_b4=0; // Para medir tiempos
 
 do{
 
     /* ===== BUCLE 1 : asignación de clusters ===== */
 
+    double t0 = omp_get_wtime();
     #pragma omp parallel for private(j,min,dif)
     for (i=0;i<fN;i++)
     {
@@ -38,20 +40,22 @@ do{
 
         fD[i] = min;
     }
+    t_b1 += omp_get_wtime() - t0;
 
 
     /* ===== BUCLE 2 : inicializar acumuladores ===== */
-
+    t0 = omp_get_wtime();
     #pragma omp parallel for
     for(i=0;i<fK;i++)
     {
         fS[i] = 0;
         fA[i] = 0;
     }
+    t_b2 += omp_get_wtime() - t0;
 
 
     /* ===== BUCLE 3 : sumar valores por cluster ===== */
-
+    t0 = omp_get_wtime();
     #pragma omp parallel
     {
         long fS_local[G];
@@ -80,10 +84,12 @@ do{
             }
         }
     }
+    t_b3 += omp_get_wtime() - t0;
 
     /* ===== BUCLE 4 : recalcular centroides ===== */
+    t0 = omp_get_wtime();
     dif = 0;
-
+    #pragma omp parallel for reduction(+:dif)
     for(i=0;i<fK;i++)
     {
         t = fR[i];
@@ -93,12 +99,18 @@ do{
 
         dif += labs(t - fR[i]);
     }
+    t_b4 += omp_get_wtime() - t0;
 
     iter++;
 
 }while(dif);
 
 printf("iter %d\n",iter);
+printf("iter %d\n",iter);
+printf("Tiempo bucle1: %f\n", t_b1);
+printf("Tiempo bucle2: %f\n", t_b2);
+printf("Tiempo bucle3: %f\n", t_b3);
+printf("Tiempo bucle4: %f\n", t_b4);
 }
 
 
@@ -155,6 +167,7 @@ if(i < fi) qs(i,fi,fV,fA);
 int main()
 {
 int i;
+double tiempo_qs = 0;
 printf("Threads: %d\n", omp_get_max_threads());
 
 for (i=0;i<N;i++)
@@ -165,7 +178,10 @@ for (i=0;i<G;i++)
 
 kmean(N,G,V,R,A);
 
+double t0 =  omp_get_wtime();
 qs(0,G-1,R,A);
+tiempo_qs = omp_get_wtime() -  t0;
+printf("Tiempo del quickSearch: %f \n", tiempo_qs);
 
 for (i=0;i<G;i++)
     printf("R[%d] : %ld te %d agrupats\n",i,R[i],A[i]);
