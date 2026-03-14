@@ -203,5 +203,5 @@ R[196] : 2911 te 4013 agrupats
 R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
-11.53user 0.00system 0:01.49elapsed 773%CPU (0avgtext+0avgdata 8960maxresident)k
-40inputs+0outputs (2major+1856minor)pagefaults 0swaps
+10.13user 0.00system 0:01.28elapsed 790%CPU (0avgtext+0avgdata 8960maxresident)k
+40inputs+0outputs (2major+1855minor)pagefaults 0swaps

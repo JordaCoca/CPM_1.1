@@ -22,16 +22,15 @@ do{
     /* ===== BUCLE 1 : asignación de clusters ===== */
     double t0 = omp_get_wtime();
 
-    #pragma omp parallel for schedule(static) private(j,min,dif)
+    #pragma omp parallel for private(j,min,dif)
     for (i=0;i<fN;i++)
     {
         min = 0;
-        long aux = fV[i];                   // Cargamos el valor en una val auxiliar para no tener que acceder cada vez a consultar la posición
-        dif = labs(aux-fR[0]);
+        dif = labs(fV[i]-fR[0]);
 
         for (j=1;j<fK;j++)
         {
-            long d = labs(aux-fR[j]);
+            long d = labs(fV[i]-fR[j]);
             if (d < dif)
             {
                 min = j;
@@ -40,18 +39,18 @@ do{
         }
 
         fD[i] = min;
-
-        
     }
+
     t_b1 += omp_get_wtime() - t0;
     
 
     /* ===== BUCLE 2 : Peparamos los arrays ===== */
     t0 = omp_get_wtime();
+    #pragma omp parallel for
     for(i=0;i<fK;i++)
     {
-            fS[i] = 0;
-            fA[i] = 0;
+        fS[i] = 0;
+        fA[i] = 0;
     }
     t_b2 += omp_get_wtime() - t0;
     
