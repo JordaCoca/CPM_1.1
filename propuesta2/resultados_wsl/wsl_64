@@ -3,6 +3,11 @@ Maquina: wsl
 Threads: 64
 Threads: 64
 iter 147
+Tiempo bucle1: 0.653671
+Tiempo bucle2: 0.000022
+Tiempo bucle3: 0.042793
+Tiempo bucle4: 0.000062
+Tiempo del quickSearch: 0.000006 
 R[0] : 0 te 1664 agrupats
 R[1] : 1 te 1353 agrupats
 R[2] : 2 te 2547 agrupats
@@ -203,5 +208,5 @@ R[196] : 2911 te 4013 agrupats
 R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
-13.81user 0.40system 0:-1.52elapsed 0%CPU (0avgtext+0avgdata 9184maxresident)k
+13.74user 0.13system 0:00.71elapsed 1949%CPU (0avgtext+0avgdata 9184maxresident)k
 40inputs+0outputs (2major+1978minor)pagefaults 0swaps
