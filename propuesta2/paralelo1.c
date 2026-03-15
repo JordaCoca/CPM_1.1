@@ -22,7 +22,7 @@ do{
     /* ===== BUCLE 1 : asignación de clusters ===== */
 
     double t0 = omp_get_wtime();
-    #pragma omp parallel for private(j,min,dif)
+    #pragma omp parallel for schedule(dynamic, 50000)
     for (i=0;i<fN;i++)
     {
         min = 0;
@@ -45,6 +45,7 @@ do{
 
     /* ===== BUCLE 2 : inicializar acumuladores ===== */
     t0 = omp_get_wtime();
+    #pragma omp parallel for
     for(i=0;i<fK;i++)
     {
         fS[i] = 0;
@@ -88,7 +89,6 @@ do{
     /* ===== BUCLE 4 : recalcular centroides ===== */
     t0 = omp_get_wtime();
     dif = 0;
-    #pragma omp parallel for reduction(+:dif)
     for(i=0;i<fK;i++)
     {
         t = fR[i];
