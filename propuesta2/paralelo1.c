@@ -55,16 +55,40 @@ do{
 
     /* ===== BUCLE 3 : sumar valores por cluster ===== */
     t0 = omp_get_wtime();
-    for(i=0;i<fN;i++)
-	{
-		fS[fD[i]] += fV[i];
-		fA[fD[i]] ++;
-	}
+    #pragma omp parallel
+    {
+        long fS_local[G];
+        int  fA_local[G];
+
+        for(int k=0;k<fK;k++)
+        {
+            fS_local[k] = 0;
+            fA_local[k] = 0;
+        }
+
+        #pragma omp for
+        for(i=0;i<fN;i++)
+        {
+            int c = fD[i];
+            fS_local[c] += fV[i];
+            fA_local[c] ++;
+        }
+
+        #pragma omp critical
+        {
+            for(int k=0;k<fK;k++)
+            {
+                fS[k] += fS_local[k];
+                fA[k] += fA_local[k];
+            }
+        }
+    }
     t_b3 += omp_get_wtime() - t0;
 
     /* ===== BUCLE 4 : recalcular centroides ===== */
     t0 = omp_get_wtime();
     dif = 0;
+    #pragma omp parallel for reduction(+:dif)
     for(i=0;i<fK;i++)
     {
         t = fR[i];
