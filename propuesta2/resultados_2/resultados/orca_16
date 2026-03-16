@@ -1,18 +1,16 @@
 Programa: paralelo1
 Maquina: orca
-Threads: 4
-Run: 7
+Threads: 16
+Run: 
 ----------------------
-srun: job 28416797 queued and waiting for resources
-srun: job 28416797 has been allocated resources
-Threads: 4
+Threads: 16
 iter 147
 iter 147
-Tiempo bucle1: 11.695124
-Tiempo bucle2: 0.000017
-Tiempo bucle3: 0.196803
-Tiempo bucle4: 0.000127
-Tiempo del quickSearch: 0.000008 
+Tiempo bucle1: 1.345016
+Tiempo bucle2: 0.000464
+Tiempo bucle3: 0.013610
+Tiempo bucle4: 0.000164
+Tiempo del quickSearch: 0.000009 
 R[0] : 0 te 1664 agrupats
 R[1] : 1 te 1353 agrupats
 R[2] : 2 te 2547 agrupats
@@ -213,5 +211,5 @@ R[196] : 2911 te 4013 agrupats
 R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
-23.87user 0.00system 0:11.90elapsed 200%CPU (0avgtext+0avgdata 8876maxresident)k
-0inputs+0outputs (0major+1350minor)pagefaults 0swaps
+21.73user 0.00system 0:01.37elapsed 1583%CPU (0avgtext+0avgdata 9096maxresident)k
+0inputs+0outputs (0major+878minor)pagefaults 0swaps

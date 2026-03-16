@@ -22,7 +22,7 @@ do{
     /* ===== BUCLE 1 : asignación de clusters ===== */
 
     double t0 = omp_get_wtime();
-    #pragma omp parallel for schedule(dynamic, 50000)
+    #pragma omp parallel for private(j,min,dif)
     for (i=0;i<fN;i++)
     {
         min = 0;
