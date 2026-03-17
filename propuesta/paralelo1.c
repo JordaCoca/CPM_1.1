@@ -60,7 +60,7 @@ do{
     {
         long fS_local[G];
         int  fA_local[G];
-
+        
         for(int k=0;k<fK;k++)
         {
             fS_local[k] = 0;
