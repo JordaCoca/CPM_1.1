@@ -127,7 +127,7 @@ f = fi;
 vtmp = fV[i];
 vta  = fA[i];
 
-
+// No creo que valga la pena paralelizar esto
 while(i <= f)
 {
     if(vtmp < pi)
