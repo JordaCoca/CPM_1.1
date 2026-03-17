@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <omp.h>
 
 #define N 600000
 #define G 200
@@ -10,136 +11,180 @@ int A[G];
 
 void kmean(int fN, int fK, long fV[], long fR[], int fA[])
 {
-    int i, j, min, iter = 0;
-    long dif, t, dif2;
-    long fS[G];
-    int fD[N];
+int i,j,min,iter=0;
+long dif,t;
+long fS[G];
+int fD[N];
+double t_b1=0, t_b2=0, t_b3=0, t_b4=0; // Para medir tiempos
 
-    do
+do{
+
+    /* ===== BUCLE 1 : asignación de clusters ===== */
+
+    double t0 = omp_get_wtime();
+    #pragma omp parallel for private(j)
+    for (i=0;i<fN;i++)
     {
-        
-        #pragma omp parallel for private(j) 
-        for (i = 0; i < fN; i++)
-        {
-            min = 0;
-            dif = abs(fV[i] - fR[0]);
+        min = 0;
+        dif = labs(fV[i]-fR[0]);
 
-            for (j = 1; j < fK; j++)
+        for (j=1;j<fK;j++)
+        {
+            long d = labs(fV[i]-fR[j]);
+            if (d < dif)
             {
-                long curr_dif = abs(fV[i] - fR[j]);
-                if (curr_dif < dif)
-                {
-                    min = j;
-                    dif = curr_dif;
-                }
+                min = j;
+                dif = d;
             }
-
-            fD[i] = min;
         }
 
-        for (i = 0; i < fK; i++)
+        fD[i] = min;
+    }
+    t_b1 += omp_get_wtime() - t0;
+
+
+    /* ===== BUCLE 2 : inicializar acumuladores ===== */
+    t0 = omp_get_wtime();
+    #pragma omp parallel for
+    for(i=0;i<fK;i++)
+    {
+        fS[i] = 0;
+        fA[i] = 0;
+    }
+    t_b2 += omp_get_wtime() - t0;
+
+
+    /* ===== BUCLE 3 : sumar valores por cluster ===== */
+    t0 = omp_get_wtime();
+    #pragma omp parallel
+    {
+        long fS_local[G];
+        int  fA_local[G];
+
+        for(int k=0;k<fK;k++)
         {
-            fS[i] = 0;
-            fA[i] = 0;
+            fS_local[k] = 0;
+            fA_local[k] = 0;
         }
 
-        #pragma omp parallel for reduction(+:fS[0:fK], fA[0:fK])
-        for (i = 0; i < fN; i++)
+        #pragma omp for
+        for(i=0;i<fN;i++)
         {
-            fS[fD[i]] = fS[fD[i]] + fV[i];
-            fA[fD[i]] = fA[fD[i]] + 1;
+            int c = fD[i];
+            fS_local[c] += fV[i];
+            fA_local[c] ++;
         }
 
-        dif = 0;
-
-        #pragma omp parallel for reduction(+:dif) private(t)
-        for (i = 0; i < fK; i++)
+        #pragma omp critical
         {
-            t = fR[i];
-
-            if (fA[i])
+            for(int k=0;k<fK;k++)
             {
-                fR[i] = fS[i] / fA[i];
+                fS[k] += fS_local[k];
+                fA[k] += fA_local[k];
             }
-            dif = dif + abs(t - fR[i]);
         }
+    }
+    t_b3 += omp_get_wtime() - t0;
 
-        iter++;
+    /* ===== BUCLE 4 : recalcular centroides ===== */
+    t0 = omp_get_wtime();
+    #pragma omp parallel for reduction(+:dif) private(t)
+    dif = 0;
+    for(i=0;i<fK;i++)
+    {
+        t = fR[i];
 
-    } while (dif);
+        if (fA[i])
+            fR[i] = fS[i] / fA[i];
 
-    printf("iter %d\n", iter);
+        dif += labs(t - fR[i]);
+    }
+    t_b4 += omp_get_wtime() - t0;
+
+    iter++;
+
+}while(dif);
+
+printf("iter %d\n",iter);
+printf("iter %d\n",iter);
+printf("Tiempo bucle1: %f\n", t_b1);
+printf("Tiempo bucle2: %f\n", t_b2);
+printf("Tiempo bucle3: %f\n", t_b3);
+printf("Tiempo bucle4: %f\n", t_b4);
 }
+
 
 void qs(int ii, int fi, long fV[], int fA[])
 {
-    int i, f;
-    long pi, pa, vtmp, vta, vfi, vfa;
+int i,f;
+long pi,pa,vtmp,vta,vfi,vfa;
 
-    pi = fV[ii];
-    pa = fA[ii];
+pi = fV[ii];
+pa = fA[ii];
 
-    i = ii + 1;
-    f = fi;
+i = ii+1;
+f = fi;
 
-    vtmp = fV[i];
-    vta = fA[i];
+vtmp = fV[i];
+vta  = fA[i];
 
-    while (i <= f)
+// No creo que valga la pena paralelizar esto
+while(i <= f)
+{
+    if(vtmp < pi)
     {
-        if (vtmp < pi)
-        {
-            fV[i - 1] = vtmp;
-            fA[i - 1] = vta;
+        fV[i-1] = vtmp;
+        fA[i-1] = vta;
 
-            i++;
+        i++;
 
-            vtmp = fV[i];
-            vta = fA[i];
-        }
-        else
-        {
-            vfi = fV[f];
-            vfa = fA[f];
-
-            fV[f] = vtmp;
-            fA[f] = vta;
-
-            f--;
-
-            vtmp = vfi;
-            vta = vfa;
-        }
+        vtmp = fV[i];
+        vta  = fA[i];
     }
+    else
+    {
+        vfi = fV[f];
+        vfa = fA[f];
 
-    fV[i - 1] = pi;
-    fA[i - 1] = pa;
+        fV[f] = vtmp;
+        fA[f] = vta;
 
-    if (ii < f)
-        qs(ii, f, fV, fA);
+        f--;
 
-    if (i < fi)
-        qs(i, fi, fV, fA);
+        vtmp = vfi;
+        vta  = vfa;
+    }
 }
+
+fV[i-1] = pi;
+fA[i-1] = pa;
+
+if(ii < f) qs(ii,f,fV,fA);
+if(i < fi) qs(i,fi,fV,fA);
+}
+
 
 int main()
 {
-    int i;
+int i;
+double tiempo_qs = 0;
+printf("Threads: %d\n", omp_get_max_threads());
 
-    for (i = 0; i < N; i++)
-        V[i] = (rand() % rand()) / N;
+for (i=0;i<N;i++)
+    V[i] = (rand()%rand())/N;
 
-    // primeros candidatos
-    for (i = 0; i < G; i++)
-        R[i] = V[i];
+for (i=0;i<G;i++)
+    R[i] = V[i];
 
-    // calcular los G más representativos
-    kmean(N, G, V, R, A);
+kmean(N,G,V,R,A);
 
-    qs(0, G - 1, R, A);
+double t0 =  omp_get_wtime();
+qs(0,G-1,R,A);
+tiempo_qs = omp_get_wtime() -  t0;
+printf("Tiempo del quickSearch: %f \n", tiempo_qs);
 
-    for (i = 0; i < G; i++)
-        printf("R[%d] : %ld tiene %d agrupados\n", i, R[i], A[i]);
+for (i=0;i<G;i++)
+    printf("R[%d] : %ld te %d agrupats\n",i,R[i],A[i]);
 
-    return 0;
+return 0;
 }
