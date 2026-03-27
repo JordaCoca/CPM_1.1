@@ -43,7 +43,7 @@ do
         echo "Run: $i"
         echo "----------------------"
 
-        srun -p orca -c $t time $BIN
+        srun -p teen -c $t time $BIN
     } &> $RESULTS_DIR/teen_${t}
 done
 
