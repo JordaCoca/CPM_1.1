@@ -19,10 +19,20 @@ double t_b1=0, t_b2=0, t_b3=0, t_b4=0; // Para medir tiempos
 
 do{
 
-    /* ===== BUCLE 1 : asignación de clusters ===== */
-
+    /* ===== BUCLE 2 : inicializar acumuladores ===== */
+    // Lo pongo arriba para inicializar ya los arrays
     double t0 = omp_get_wtime();
-    #pragma omp parallel for private(j,min,dif)
+    for (i = 0; i < fK; i++)
+    {
+            fS[i] = 0;
+            fA[i] = 0;
+    }
+    t_b2 += omp_get_wtime() - t0;
+
+    /* ===== BUCLE 1 : asignación de clusters i BUCLE 3: Fusionados===== */
+
+    t0 = omp_get_wtime();
+    #pragma omp parallel for private(j,min,dif) reduction(+:fS[:fK], fA[:fK])
     for (i=0;i<fN;i++)
     {
         min = 0;
@@ -38,57 +48,16 @@ do{
             }
         }
 
-        fD[i] = min;
+        fS[min] += fV[i];
+        fA[min] += 1;
     }
     t_b1 += omp_get_wtime() - t0;
-
-
-    /* ===== BUCLE 2 : inicializar acumuladores ===== */
-    t0 = omp_get_wtime();
-    #pragma omp parallel for
-    for(i=0;i<fK;i++)
-    {
-        fS[i] = 0;
-        fA[i] = 0;
-    }
-    t_b2 += omp_get_wtime() - t0;
-
-
-    /* ===== BUCLE 3 : sumar valores por cluster ===== */
-    t0 = omp_get_wtime();
-    #pragma omp parallel
-    {
-        long fS_local[G];
-        int  fA_local[G];
-        
-        for(int k=0;k<fK;k++)
-        {
-            fS_local[k] = 0;
-            fA_local[k] = 0;
-        }
-
-        #pragma omp for
-        for(i=0;i<fN;i++)
-        {
-            int c = fD[i];
-            fS_local[c] += fV[i];
-            fA_local[c] ++;
-        }
-
-        #pragma omp critical
-        {
-            for(int k=0;k<fK;k++)
-            {
-                fS[k] += fS_local[k];
-                fA[k] += fA_local[k];
-            }
-        }
-    }
-    t_b3 += omp_get_wtime() - t0;
+    
 
     /* ===== BUCLE 4 : recalcular centroides ===== */
     t0 = omp_get_wtime();
     dif = 0;
+    #pragma omp parallel for reduction(+:dif) private(t)
     for(i=0;i<fK;i++)
     {
         t = fR[i];
@@ -108,7 +77,6 @@ printf("iter %d\n",iter);
 printf("iter %d\n",iter);
 printf("Tiempo bucle1: %f\n", t_b1);
 printf("Tiempo bucle2: %f\n", t_b2);
-printf("Tiempo bucle3: %f\n", t_b3);
 printf("Tiempo bucle4: %f\n", t_b4);
 }
 
