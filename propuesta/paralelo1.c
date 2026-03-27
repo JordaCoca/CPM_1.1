@@ -77,7 +77,6 @@ printf("iter %d\n",iter);
 printf("iter %d\n",iter);
 printf("Tiempo bucle1: %f\n", t_b1);
 printf("Tiempo bucle2: %f\n", t_b2);
-printf("Tiempo bucle3: %f\n", t_b3);
 printf("Tiempo bucle4: %f\n", t_b4);
 }
 

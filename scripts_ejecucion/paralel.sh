@@ -31,4 +31,20 @@ do
     } &> $RESULTS_DIR/orca_${t}
 done
 
+echo "===== EJECUCIONES EN TEEN ====="
+
+for t in 2 4 8 16 32 
+do
+    echo "Configuracion: $t threads"
+    {
+        echo "Programa: paralelo1"
+        echo "Maquina: teen"
+        echo "Threads: $t"
+        echo "Run: $i"
+        echo "----------------------"
+
+        srun -p orca -c $t time $BIN
+    } &> $RESULTS_DIR/teen_${t}
+done
+
 echo "Ejecuciones completadas"
