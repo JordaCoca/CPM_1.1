@@ -33,7 +33,7 @@ mkdir -p $RESULTS_DIR
 
 echo "===== EJECUCIONES EN TEEN ====="
 
-for t in 1 2 4 8 16 32 
+for t in 2 4 8 16 32 
 do
     echo "Configuracion: $t threads"
     {
@@ -43,7 +43,7 @@ do
         echo "Run: $i"
         echo "----------------------"
 
-        srun -p teen -c $t time $BIN
+        srun -p teen -n 1 -c $t time $BIN
     } &> $RESULTS_DIR/teen_${t}
 done
 
