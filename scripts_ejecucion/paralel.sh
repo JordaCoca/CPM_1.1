@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SRC="./paralelo1.c"
+SRC="./paralelo3.c"
 RESULTS_DIR="./resultados"
-BIN="./pal1"
+BIN="./pal3"
 
 RUNS=10
 
@@ -15,29 +15,29 @@ if [ $? -ne 0 ]; then
 fi
 mkdir -p $RESULTS_DIR
 
-echo "===== EJECUCIONES EN ORCA ====="
+#echo "===== EJECUCIONES EN ORCA ====="
 
-for t in 2 4 8 16 32 64 128
-do
-    echo "Configuracion: $t threads"
-    {
-        echo "Programa: paralelo1"
-        echo "Maquina: orca"
-        echo "Threads: $t"
-        echo "Run: $i"
-        echo "----------------------"
+#for t in 2 4 8 16 32 64 128
+#do
+    #echo "Configuracion: $t threads"
+    #{
+        #echo "Programa: paralelo3"
+        #echo "Maquina: orca"
+        #echo "Threads: $t"
+        #echo "Run: $i"
+        #echo "----------------------"
 
-        srun -p orca -c $t time $BIN
-    } &> $RESULTS_DIR/orca_${t}
-done
+        #srun -p orca -c $t time $BIN
+    #} &> $RESULTS_DIR/orca_${t}
+#done
 
 echo "===== EJECUCIONES EN TEEN ====="
 
-for t in 2 4 8 16 32 
+for t in 1 2 4 8 16 32 
 do
     echo "Configuracion: $t threads"
     {
-        echo "Programa: paralelo1"
+        echo "Programa: paralelo3"
         echo "Maquina: teen"
         echo "Threads: $t"
         echo "Run: $i"
