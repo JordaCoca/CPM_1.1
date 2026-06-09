@@ -58,7 +58,7 @@ do
             --nodes=1 \
             --ntasks=1 \
             --cpus-per-task=$t \
-            time -p $BIN
+            /usr/bin/time -p $BIN
     } &> $RESULTS_DIR/teen_${t}
 done
 

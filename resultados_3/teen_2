@@ -5,10 +5,10 @@ Run:
 ----------------------
 Threads: 2
 iter 147
-Tiempo bucle1: 7.292572
-Tiempo bucle2: 0.000008
-Tiempo bucle3: 0.034200
-Tiempo bucle4: 0.000075
+Tiempo bucle1: 7.293309
+Tiempo bucle2: 0.000007
+Tiempo bucle3: 0.034217
+Tiempo bucle4: 0.000078
 Tiempo del quickSearch: 0.000005
 R[0] : 0 te 1664 agrupats
 R[1] : 1 te 1353 agrupats
@@ -211,5 +211,5 @@ R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
 real 7.33
-user 14.65
+user 14.66
 sys 0.00
