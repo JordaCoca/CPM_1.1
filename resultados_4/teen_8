@@ -1,15 +1,9 @@
-Programa: paralelo1
+Programa: paralelo4
 Maquina: teen
-Threads: 2
+Threads: 8
 Run: 
 ----------------------
-Threads: 2
 iter 147
-iter 147
-Tiempo bucle1: 13.063704
-Tiempo bucle2: 0.000010
-Tiempo bucle4: 0.000169
-Tiempo del quickSearch: 0.000008 
 R[0] : 0 te 1664 agrupats
 R[1] : 1 te 1353 agrupats
 R[2] : 2 te 2547 agrupats
@@ -210,5 +204,6 @@ R[196] : 2911 te 4013 agrupats
 R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
-26.14user 0.00system 0:13.08elapsed 199%CPU (0avgtext+0avgdata 6688maxresident)k
-0inputs+0outputs (0major+762minor)pagefaults 0swaps
+real 1.86
+user 14.85
+sys 0.00

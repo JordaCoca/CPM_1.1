@@ -1,16 +1,9 @@
-Programa: paralelo1
+Programa: paralelo3
 Maquina: orca
-Threads: 16
+Threads: 32
 Run: 
 ----------------------
-Threads: 16
 iter 147
-iter 147
-Tiempo bucle1: 1.690319
-Tiempo bucle2: 0.000498
-Tiempo bucle3: 0.013552
-Tiempo bucle4: 0.000161
-Tiempo del quickSearch: 0.000009 
 R[0] : 0 te 1664 agrupats
 R[1] : 1 te 1353 agrupats
 R[2] : 2 te 2547 agrupats
@@ -211,5 +204,5 @@ R[196] : 2911 te 4013 agrupats
 R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
-27.27user 0.01system 0:01.72elapsed 1578%CPU (0avgtext+0avgdata 9264maxresident)k
-0inputs+0outputs (0major+879minor)pagefaults 0swaps
+28.04user 0.00system 0:00.90elapsed 3113%CPU (0avgtext+0avgdata 7112maxresident)k
+0inputs+0outputs (0major+343minor)pagefaults 0swaps

@@ -1,17 +1,9 @@
-Programa: paralelo1
-Maquina: orca
-Threads: 128
+Programa: paralelo4
+Maquina: teen
+Threads: 4
 Run: 
 ----------------------
-srun: job 35737 queued and waiting for resources
-srun: job 35737 has been allocated resources
-Threads: 128
 iter 147
-iter 147
-Tiempo bucle1: 0.315977
-Tiempo bucle2: 0.000097
-Tiempo bucle4: 0.037187
-Tiempo del quickSearch: 0.000012 
 R[0] : 0 te 1664 agrupats
 R[1] : 1 te 1353 agrupats
 R[2] : 2 te 2547 agrupats
@@ -212,5 +204,6 @@ R[196] : 2911 te 4013 agrupats
 R[197] : 3046 te 3551 agrupats
 R[198] : 3203 te 2955 agrupats
 R[199] : 3390 te 1878 agrupats
-44.37user 0.01system 0:00.37elapsed 11711%CPU (0avgtext+0avgdata 8196maxresident)k
-0inputs+0outputs (0major+1129minor)pagefaults 0swaps
+real 3.66
+user 14.61
+sys 0.00
