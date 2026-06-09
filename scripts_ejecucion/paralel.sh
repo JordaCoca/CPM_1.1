@@ -24,10 +24,19 @@ do
         echo "Programa: paralelo3"
         echo "Maquina: orca"
         echo "Threads: $t"
-        echo "Run: $i"
         echo "----------------------"
 
-        srun -p orca -c $t time $BIN
+        export OMP_NUM_THREADS=$t
+        export OMP_DYNAMIC=FALSE
+        export OMP_PLACES=cores
+        export OMP_PROC_BIND=spread
+
+        srun -p orca \
+            --nodes=1 \
+            --ntasks=1 \
+            --cpus-per-task=$t \
+            /usr/bin/time -p $BIN
+
     } &> $RESULTS_DIR/orca_${t}
 done
 

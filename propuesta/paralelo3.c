@@ -24,13 +24,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
     do
     {
         double t0;
-
-        /*
-         * BUCLE 1:
-         * Para cada elemento de V, buscamos el centroide R[j] más cercano.
-         * Este bucle es el más costoso: fN * fK operaciones aproximadamente.
-         * Es el candidato principal para paralelizar.
-         */
         t0 = omp_get_wtime();
 
         #pragma omp parallel for private(j) schedule(static)
@@ -55,13 +48,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
 
         t_b1 += omp_get_wtime() - t0;
 
-
-        /*
-         * BUCLE 2:
-         * Inicialización de acumuladores.
-         * No lo paralelizamos porque fK = 200, es demasiado pequeño.
-         * Crear trabajo paralelo aquí puede costar más que hacerlo secuencial.
-         */
         t0 = omp_get_wtime();
 
         for (i = 0; i < fK; i++)
@@ -72,22 +58,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
 
         t_b2 += omp_get_wtime() - t0;
 
-
-        /*
-         * BUCLE 3:
-         * Acumulamos la suma y el número de elementos de cada cluster.
-         *
-         * No podemos hacer directamente:
-         *
-         *     fS[fD[i]] += fV[i];
-         *     fA[fD[i]]++;
-         *
-         * en paralelo sobre los arrays globales, porque habría condiciones de carrera.
-         *
-         * Solución:
-         * Cada thread usa sus propios arrays locales fS_local y fA_local.
-         * Al final, cada thread suma sus resultados locales en los arrays globales.
-         */
         t0 = omp_get_wtime();
 
         #pragma omp parallel
@@ -122,17 +92,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
 
         t_b3 += omp_get_wtime() - t0;
 
-
-        /*
-         * BUCLE 4:
-         * Recalculamos los centroides y acumulamos el cambio total en dif.
-         *
-         * dif se usa como condición de parada:
-         * si ningún centroide cambia, dif queda a 0 y termina el algoritmo.
-         *
-         * Se puede paralelizar con reduction porque cada iteración suma
-         * una contribución independiente a dif.
-         */
         t0 = omp_get_wtime();
 
         dif = 0;
