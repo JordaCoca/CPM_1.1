@@ -6,7 +6,7 @@ BIN="./sec"
 
 
 echo "Compilando programa..."
-cc -O3 -fopenmp $SRC -o $BIN
+cc -O3  $SRC -o $BIN
 
 if [ $? -ne 0 ]; then
     echo "Error en compilacion"
@@ -14,8 +14,8 @@ if [ $? -ne 0 ]; then
 fi
 mkdir -p $RESULTS_DIR
 
-#echo "===== EJECUCION  SECUENCIAL EN ORCA ====="
-#srun -p orca -c 1 time $BIN &> $RESULTS_DIR/orca_sec
+echo "===== EJECUCION  SECUENCIAL EN ORCA ====="
+srun -p orca -c 1 time $BIN &> $RESULTS_DIR/orca_sec
 echo "===== EJECUCION  SECUENCIAL EN TEEN ====="
 srun -p teen -n 1 -c 1 time $BIN &> $RESULTS_DIR/teen_sec
 

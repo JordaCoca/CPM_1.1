@@ -7,7 +7,7 @@ BIN="./paralelo3"
 RUNS=10
 
 echo "Compilando programa..."
-cc -O3 -fopenmp $SRC -o $BIN
+cc  -O3 -fopenmp $SRC -o $BIN
 
 if [ $? -ne 0 ]; then
     echo "Error en compilacion"
