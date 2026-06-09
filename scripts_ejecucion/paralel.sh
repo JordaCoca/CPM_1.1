@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SRC="./paralelo4.c"
-RESULTS_DIR="./resultados_4"
-BIN="./paralelo4"
+SRC="./paralelo3.c"
+RESULTS_DIR="./resultados_3"
+BIN="./paralelo3"
 
 RUNS=10
 
@@ -37,7 +37,7 @@ for t in 1 2 4 8 16 32
 do
     echo "Configuracion: $t threads"
     {
-        echo "Programa: paralelo4"
+        echo "Programa: paralelo3"
         echo "Maquina: teen"
         echo "Threads: $t"
         echo "Run: $i"
