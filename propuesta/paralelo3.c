@@ -96,7 +96,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
 
         dif = 0;
 
-        #pragma omp parallel for reduction(+:dif) schedule(static)
         for (i = 0; i < fK; i++)
         {
             long old = fR[i];
