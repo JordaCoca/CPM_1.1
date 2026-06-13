@@ -20,8 +20,6 @@ echo "===== EJECUCIONES EN ORCA ====="
 
 for t in 1 2 4 8 16 32 64 128
 do
-    for r in $(seq 1 $RUNS)
-    do
         echo "Configuracion: $t threads, run $r"
 
         {
@@ -43,7 +41,6 @@ do
                 /usr/bin/time -p "$BIN"
 
         } &> "$RESULTS_DIR/orca_${t}_run_${r}"
-    done
 done
 
 echo "===== EJECUCIONES EN TEEN ====="
@@ -51,8 +48,6 @@ echo "===== EJECUCIONES EN TEEN ====="
 # TEEN tiene 16 CPUs logicas, por eso no ejecuto 32
 for t in 1 2 4 8 16
 do
-    for r in $(seq 1 $RUNS)
-    do
         echo "Configuracion: $t threads, run $r"
 
         {
@@ -74,7 +69,6 @@ do
                 /usr/bin/time -p "$BIN"
 
         } &> "$RESULTS_DIR/teen_${t}_run_${r}"
-    done
 done
 
 echo "Ejecuciones completadas"
