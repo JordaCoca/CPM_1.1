@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SRC="./paralelo4.c"
-RESULTS_DIR="./resultados_4"
-BIN="./paralelo4"
+SRC="./paralelo3.c"
+RESULTS_DIR="./resultados_3"
+BIN="./paralelo3"
 
 RUNS=10
 
@@ -23,7 +23,7 @@ do
         echo "Configuracion: $t threads, run $r"
 
         {
-            echo "Programa: paralelo4"
+            echo "Programa: paralelo3"
             echo "Maquina: orca"
             echo "Threads: $t"
             echo "Run: $r"
@@ -38,9 +38,9 @@ do
                 --nodes=1 \
                 --ntasks=1 \
                 --cpus-per-task=$t \
-                /usr/bin/time -p "$BIN"
+                time "$BIN"
 
-        } &> "$RESULTS_DIR/orca_${t}_run_${r}"
+        } &> "$RESULTS_DIR/orca_${t}"
 done
 
 echo "===== EJECUCIONES EN TEEN ====="
@@ -51,7 +51,7 @@ do
         echo "Configuracion: $t threads, run $r"
 
         {
-            echo "Programa: paralelo4"
+            echo "Programa: paralelo3"
             echo "Maquina: teen"
             echo "Threads: $t"
             echo "Run: $r"
@@ -66,9 +66,9 @@ do
                 --nodes=1 \
                 --ntasks=1 \
                 --cpus-per-task=$t \
-                /usr/bin/time -p "$BIN"
+                time "$BIN"
 
-        } &> "$RESULTS_DIR/teen_${t}_run_${r}"
+        } &> "$RESULTS_DIR/teen_${t}"
 done
 
 echo "Ejecuciones completadas"
