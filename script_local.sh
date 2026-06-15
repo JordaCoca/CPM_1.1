@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SRC="./propuesta/paralelo3.c"
-RESULTS_DIR="./resultados_wsl_1"
-BIN="./paralelo3_wsl"
+SRC="./propuesta/paralelo4.c"
+RESULTS_DIR="./resultados_wsl_2"
+BIN="./paralelo4_wsl"
 
 echo "Compilando programa..."
 gcc -O3 -fopenmp "$SRC" -o "$BIN"
@@ -24,7 +24,7 @@ do
     echo "Configuracion: $t threads"
 
     {
-        echo "Programa: paralelo3"
+        echo "Programa: paralelo4"
         echo "Maquina: WSL"
         echo "CPU: Intel i7-14700KF"
         echo "Threads: $t"
