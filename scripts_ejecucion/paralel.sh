@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SRC="./paralelo3.c"
-RESULTS_DIR="./resultados_3"
-BIN="./paralelo3"
+SRC="./paralelo4.c"
+RESULTS_DIR="./resultados_4"
+BIN="./paralelo4"
 
 echo "Compilando programa..."
 gcc -O3 -fopenmp $SRC -o $BIN
@@ -19,7 +19,7 @@ for t in 1 2 4 8 16 32 64
 do
     echo "Configuracion: $t threads"
     {
-        echo "Programa: paralelo3"
+        echo "Programa: paralelo4"
         echo "Maquina: orca"
         echo "Threads: $t"
         echo "Run: $i"
@@ -56,7 +56,7 @@ for t in 1 2 4 8
 do
     echo "Configuracion: $t threads"
     {
-        echo "Programa: paralelo3"
+        echo "Programa: paralelo4"
         echo "Maquina: teen"
         echo "Threads: $t"
         echo "Run: $i"
