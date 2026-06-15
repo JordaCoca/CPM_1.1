@@ -16,33 +16,8 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
     long fS[G];
     int fD[N];
 
-    /*
-     * Tiempos de ejecución de cada bucle.
-        double t_b1 = 0.0;
-        double t_b2 = 0.0;
-        double t_b3 = 0.0;
-        double t_b4 = 0.0;
-     */
-    
-
-    /*
-        printf("omp_get_max_threads(): %d\n", omp_get_max_threads());
-        #pragma omp parallel
-        {
-            int tid = omp_get_thread_num();
-            int cpu = sched_getcpu();
-            #pragma omp critical
-            {
-                printf("Num threads: %d\n", omp_get_num_threads());
-                printf("Thread %d is running on CPU %d\n", tid, cpu);
-            }
-        }
-    */
-
     do
     {
-        double t0;
-        //t0 = omp_get_wtime();
 
         #pragma omp parallel for private(j) schedule(static)
         for (i = 0; i < fN; i++)
@@ -64,9 +39,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
             fD[i] = min;
         }
 
-        //t_b1 += omp_get_wtime() - t0;
-
-        //t0 = omp_get_wtime();
 
         for (i = 0; i < fK; i++)
         {
@@ -74,9 +46,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
             fA[i] = 0;
         }
 
-        //t_b2 += omp_get_wtime() - t0;
-
-        //t0 = omp_get_wtime();
 
         #pragma omp parallel
         {
@@ -108,10 +77,6 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
             }
         }
 
-        //t_b3 += omp_get_wtime() - t0;
-
-        //t0 = omp_get_wtime();
-
         dif = 0;
 
         for (i = 0; i < fK; i++)
@@ -126,17 +91,11 @@ void kmean(int fN, int fK, long fV[], long fR[], int fA[])
             dif += labs(old - fR[i]);
         }
 
-        //t_b4 += omp_get_wtime() - t0;
-
         iter++;
 
     } while (dif);
 
     printf("iter %d\n", iter);
-    //printf("Tiempo bucle1: %f\n", t_b1);
-    //printf("Tiempo bucle2: %f\n", t_b2);
-    //printf("Tiempo bucle3: %f\n", t_b3);
-    //printf("Tiempo bucle4: %f\n", t_b4);
 }
 
 
@@ -156,7 +115,6 @@ void qs(int ii, int fi, long fV[], int fA[])
 
     /*
      * No se paraleliza porque solo ordena G = 200 elementos.
-     * El coste es muy pequeño comparado con kmean.
      */
     while (i <= f)
     {
@@ -203,14 +161,8 @@ void qs(int ii, int fi, long fV[], int fA[])
 int main()
 {
     int i;
-    double tiempo_qs = 0.0;
 
     printf("Threads: %d\n", omp_get_max_threads());
-
-    /*
-     * Inicialización del vector de datos.
-     * Se mantiene secuencial para respetar el comportamiento original.
-     */
     for (i = 0; i < N; i++)
     {
         V[i] = (rand() % rand()) / N;
@@ -232,13 +184,9 @@ int main()
     /*
      * Ordenación final de los centroides.
      */
-    double t0 = omp_get_wtime();
 
     qs(0, G - 1, R, A);
 
-    tiempo_qs = omp_get_wtime() - t0;
-
-    printf("Tiempo del quickSearch: %f\n", tiempo_qs);
 
     for (i = 0; i < G; i++)
     {
